@@ -61,7 +61,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // eslint-disable-next-line no-console
-console.log('window.__POWERED_BY_QIANKUN__nrecord', window.__POWERED_BY_QIANKUN__)
+console.log('window.__POWERED_BY_QIANKUN__v3-sub-app', window.__POWERED_BY_QIANKUN__)
 
 function render(props) {
   actions.setActions(props)

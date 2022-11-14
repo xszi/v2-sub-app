@@ -19,7 +19,7 @@ function addVisitedView(view) {
     query: view.query,
     params: view.params,
     fullPath: view.fullPath,
-    childApp: view.childApp ? view.childApp : 'nrecord',
+    childApp: view.childApp ? view.childApp : 'v2-sub-app',
     title: view.meta.title,
     noCache: view.meta.noCache
   }

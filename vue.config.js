@@ -33,7 +33,7 @@ module.exports = {
      */
   publicPath: '/',
   outputDir: 'dist',
-  assetsDir: 'nrecord/static',
+  assetsDir: 'v2-sub-app/static',
   lintOnSave: process.env.NODE_ENV === 'development',
   productionSourceMap: false,
   devServer: {
