@@ -10,7 +10,7 @@
 
 #### 2. 公证签重构 API 文档
 
-- [公证签重构 API 文档] (http://confluence.fxnotary.com/confluence/pages/viewpage.action?pageId=28377461)
+- [公证签重构 API 文档] (xxx)
 
 ### 功能分支开发/命名规范
 
