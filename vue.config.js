@@ -48,6 +48,7 @@ module.exports = {
     proxy: {
       '/API': {
         // 虚拟目录
+        target: 'http://localhost:7000',
         // target: "http://218.98.113.88:42030/api/", //测试环境
         // target: "http://172.16.11.132:51100/api/",//测试环境
         // target: 'http://172.16.12.41:8001', // shaoting
@@ -60,7 +61,7 @@ module.exports = {
         // target: 'http://172.16.12.62:8006', //何毅辉
         // target: 'http://192.168.88.115:19121', //华为obs
         // target: 'http://192.168.88.115:19225',
-        target: 'https://uat-fq.esnotary.com/', // 赋强测试环境
+        // target: 'https://uat-fq.esnotary.com/', // 赋强测试环境
         // target: 'http://192.168.88.115:18311/api/processConfig',
         changeOrigin: true,
         pathRewrite: {

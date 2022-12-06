@@ -10,7 +10,7 @@ import {
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
-  headers: { 'ContentType': 'application/json; UTF-8' },
+  // headers: { 'Content-Type': 'application/json' },
   timeout: 30000 // request timeout
 })
 // 开发环境静态token
@@ -21,6 +21,9 @@ service.interceptors.request.use(
   config => {
     // do something before request is sent
     config.headers['x-notary-token'] = token //  'Bearer ' + token
+    // TODO 不知道为什么一定要这里设置请求头才生效（且里面不能加UTF-8），node服务才能收到数据
+    config.headers['Content-Type'] = 'application/json'
+    // config.headers['Content-Type'] = 'application/json; UTF-8'
     return config
   },
   error => {
