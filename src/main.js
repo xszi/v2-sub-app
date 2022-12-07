@@ -68,7 +68,8 @@ function render(props) {
   let container = null
   if (props) {
     container = props.container
-    Vue.prototype.parRouter = props.parRouter
+    Vue.prototype.$parRouter = props.parRouter
+    sessionStorage.setItem('sign_frame_token', props.token)
   }
   router = new VueRouter({
     mode: 'history',

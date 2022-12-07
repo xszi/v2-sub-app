@@ -113,7 +113,7 @@ export default {
     addTags() {
       const { name } = this.$route
       if (name) {
-        routeCache.addView(this.$route)
+        routeCache.addVisitedView(this.$route)
       }
       return false
     },
@@ -142,35 +142,19 @@ export default {
           path: '/redirect' + fullPath
         })
       })
-      // this.$store.dispatch('tagsView/delCachedView', view).then(() => {
-      //   const { fullPath } = view
-      //   this.$nextTick(() => {
-      //     this.$router.replace({
-      //       path: '/redirect' + fullPath
-      //     })
-      //   })
-      // })
     },
     closeSelectedTag(view) {
-      routeCache.delView(view)
+      routeCache.delVisitedView(view)
       const visitedViews = JSON.parse(getBrowserCache('visitedViews'))
       this.visitedViews = visitedViews
       if (this.isActive(view)) {
         this.toLastView(visitedViews, view)
       }
-      // this.$store.dispatch('tagsView/delView', view).then(({ visitedViews }) => {
-      //   if (this.isActive(view)) {
-      //     this.toLastView(visitedViews, view)
-      //   }
-      // })
     },
     closeOthersTags() {
       routeCache.delOthersViews()
       this.$router.push(this.selectedTag)
       this.moveToCurrentTag()
-      // this.$store.dispatch('tagsView/delOthersViews', this.selectedTag).then(() => {
-      //   this.moveToCurrentTag()
-      // })
     },
     closeAllTags(view) {
       routeCache.delAllViews()

@@ -10,7 +10,7 @@ const router = {
   children: [{
     path: 'desc',
     name: 'Desc',
-    meta: { title: '描述', icon: 'table' },
+    meta: { title: '七里香', icon: 'table' },
     component: () =>
       import ('@/views/other')
   }]
