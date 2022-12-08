@@ -9,8 +9,8 @@ const router = {
   meta: { title: '其他', icon: 'el-icon-s-help' },
   children: [{
     path: 'desc',
-    name: 'Desc',
-    meta: { title: '七里香', icon: 'table' },
+    name: 'BlackHumor',
+    meta: { title: '黑色幽默', icon: 'table' },
     component: () =>
       import ('@/views/other')
   }]

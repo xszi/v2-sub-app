@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
 import actions from '@/shared/actions'
-import { getBrowserCache } from '@/utils/browserCache'
 // import store from '@/store'
 import {
   localParams
@@ -14,7 +13,7 @@ const service = axios.create({
   timeout: 30000 // request timeout
 })
 // 开发环境静态token
-const token = process.env.NODE_ENV === 'development' ? localParams.staticToken : getBrowserCache('sign_frame_token')
+const token = process.env.NODE_ENV === 'development' ? localParams.staticToken : sessionStorage.getItem('sign_frame_token')
 
 // request interceptor
 service.interceptors.request.use(

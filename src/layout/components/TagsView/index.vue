@@ -10,10 +10,9 @@
         tag="span"
         class="tags-view-item"
         @click.middle.native="!isAffix(tag)?closeSelectedTag(tag):''"
-        @contextmenu.prevent.native="openMenu(tag,$event)"
       >
-        {{ tag.title }}
-        <span v-if="!isAffix(tag)" class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)" />
+        {{ tag.meta.title }}
+        <span v-if="(!isAffix(tag) && visitedViews.length > 1)" class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)" />
       </router-link>
     </scroll-pane>
   </div>
@@ -22,7 +21,6 @@
 <script>
 import actions from '@/shared/actions'
 import EventBus from '@/utils/eventBus'
-import { getBrowserCache } from '@/utils/util'
 import { routeCache } from '@/utils/routeCache'
 import ScrollPane from './ScrollPane'
 import path from 'path'
@@ -31,7 +29,6 @@ export default {
   components: { ScrollPane },
   data() {
     return {
-      visible: false,
       top: 0,
       left: 0,
       selectedTag: {},
@@ -51,19 +48,12 @@ export default {
     $route() {
       this.addTags()
       this.moveToCurrentTag()
-    },
-    visible(value) {
-      if (value) {
-        document.body.addEventListener('click', this.closeMenu)
-      } else {
-        document.body.removeEventListener('click', this.closeMenu)
-      }
     }
   },
   mounted() {
     this.initTags()
     this.addTags()
-    this.visitedViews = JSON.parse(getBrowserCache('visitedViews')) ? JSON.parse(getBrowserCache('visitedViews')) : [this.$route]
+    this.visitedViews = JSON.parse(sessionStorage.getItem('visitedViews')) ? JSON.parse(sessionStorage.getItem('visitedViews')) : [this.$route]
     actions.setGlobalState({ visitedViews: this.visitedViews })
     EventBus.$on('setRouteCache', this.getRouteCache)
   },
@@ -71,6 +61,9 @@ export default {
     EventBus.$off('setRouteCache', this.getRouteCache)
   },
   methods: {
+    handleScroll() {
+      console.warn('滚动')
+    },
     getRouteCache(e) {
       this.visitedViews = e
     },
@@ -104,7 +97,6 @@ export default {
     initTags() {
       const affixTags = this.affixTags = this.filterAffixTags(this.routes)
       for (const tag of affixTags) {
-        // Must have tag name
         if (tag.name) {
           routeCache.addVisitedView(tag)
         }
@@ -124,9 +116,7 @@ export default {
         for (const tag of tags) {
           if (tag.to.path === this.$route.path) {
             this.$refs.scrollPane.moveToTarget(tag)
-            // when query is different then update
             if (tag.to.fullPath !== this.$route.fullPath) {
-              // this.$store.dispatch('tagsView/updateVisitedView', this.$route)
               routeCache.updateVisitedView(this.$route)
             }
             break
@@ -145,62 +135,23 @@ export default {
     },
     closeSelectedTag(view) {
       routeCache.delVisitedView(view)
-      const visitedViews = JSON.parse(getBrowserCache('visitedViews'))
+      const visitedViews = JSON.parse(sessionStorage.getItem('visitedViews'))
       this.visitedViews = visitedViews
       if (this.isActive(view)) {
         this.toLastView(visitedViews, view)
       }
-    },
-    closeOthersTags() {
-      routeCache.delOthersViews()
-      this.$router.push(this.selectedTag)
-      this.moveToCurrentTag()
-    },
-    closeAllTags(view) {
-      routeCache.delAllViews()
-      if (this.affixTags.some(tag => tag.path === view.path)) {
-        return
-      }
-      const visitedViews = getBrowserCache('visitedViews')
-      this.toLastView(visitedViews, view)
     },
     toLastView(visitedViews, view) {
       const latestView = visitedViews.slice(-1)[0]
       if (latestView) {
         this.$router.push(latestView.fullPath)
       } else {
-        // now the default is to redirect to the home page if there is no tags-view,
-        // you can adjust it according to your needs.
         if (view.name === 'Dashboard') {
-          // to reload home page
           this.$router.replace({ path: '/redirect' + view.fullPath })
         } else {
           this.$router.push('/')
         }
       }
-    },
-    openMenu(tag, e) {
-      const menuMinWidth = 105
-      const offsetLeft = this.$el.getBoundingClientRect().left // container margin left
-      const offsetWidth = this.$el.offsetWidth // container width
-      const maxLeft = offsetWidth - menuMinWidth // left boundary
-      const left = e.clientX - offsetLeft + 15 // 15: margin right
-
-      if (left > maxLeft) {
-        this.left = maxLeft
-      } else {
-        this.left = left
-      }
-
-      this.top = e.clientY
-      this.visible = true
-      this.selectedTag = tag
-    },
-    closeMenu() {
-      this.visible = false
-    },
-    handleScroll() {
-      this.closeMenu()
     }
   }
 }

@@ -1,5 +1,4 @@
 
-import { getBrowserCache } from '@/utils/util'
 export default {
   data() {
     return {
@@ -7,7 +6,7 @@ export default {
     }
   },
   mounted() {
-    this.platformType = getBrowserCache('platformType')
+    this.platformType = sessionStorage.getItem('platformType')
   },
   methods: {
     pageUpdate(pageInfo) {

@@ -1,8 +1,8 @@
-import { getBrowserCache, setBrowserCache, removeBrowserCache } from '@/utils/browserCache'
+import { removeBrowserCache } from '@/utils/browserCache'
 
 export const getStorage = (name) => {
   // 未经处理的请求数据
-  const data = getBrowserCache(name)
+  const data = sessionStorage.getItem(name)
   try {
     // 将data转为js对象
     return JSON.parse(data)
@@ -16,7 +16,7 @@ export const setStorage = (name, value) => {
   if (typeof value === 'object') {
     value = JSON.stringify(value)
   }
-  setBrowserCache(name, value)
+  sessionStorage.getItem(name, value)
 }
 // 删除
 export const removeStorage = name => {

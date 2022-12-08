@@ -8,8 +8,8 @@ const router = {
   meta: { title: 'nginx转发', icon: 'el-icon-s-help' },
   children: [{
     path: 'desc',
-    name: 'Desc',
-    meta: { title: '夜曲', icon: 'table' },
+    name: 'CuteGirl',
+    meta: { title: '可爱女人', icon: 'table' },
     component: () =>
       import ('@/views/nginx')
   }]

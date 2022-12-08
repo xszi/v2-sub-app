@@ -26,7 +26,6 @@ Object.keys(filters).map(v => {
   Vue.filter(v, filters[v])
 })
 import actions from '@/shared/actions'
-import { setBrowserCache } from '@/utils/util'
 
 import VueLazyload from 'vue-lazyload'
 import 'default-passive-events' // 解决Chrome浏览器错误提示
@@ -55,9 +54,8 @@ let router = null
 let instance = null
 
 if (process.env.NODE_ENV === 'development') {
-  const visitedViews = []; const cachedViews = []
-  setBrowserCache('visitedViews', JSON.stringify(visitedViews))
-  setBrowserCache('cachedViews', JSON.stringify(cachedViews))
+  const visitedViews = []
+  sessionStorage.getItem('visitedViews', JSON.stringify(visitedViews))
 }
 
 // eslint-disable-next-line no-console
