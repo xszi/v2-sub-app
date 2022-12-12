@@ -74,11 +74,44 @@ function render(props) {
     routes: constantRoutes,
     base: window.__POWERED_BY_QIANKUN__ ? '/layout/v2-sub-app' : '/'
   })
-  instance = new Vue({
-    router,
-    store,
-    render: h => h(App)
-  }).$mount(container ? container.querySelector('#app') : '#app')
+  if (window.__POWERED_BY_QIANKUN__ && window.__CACHE_INSTANCE_BY_QIAN_KUN_FOR_VUE__) {
+    // 有缓存实例
+    const cachedInstance = window.__CACHE_INSTANCE_BY_QIAN_KUN_FOR_VUE__
+    // 从最初的Vue实例上获得_vnode
+    const cachedNode =
+        // (cachedInstance.cachedInstance && cachedInstance.cachedInstance._vnode) ||
+        cachedInstance._vnode
+    // 让当前路由在最初的Vue实例上可用
+    router.apps.push(...cachedInstance.$router.apps)
+    // keepAlive可用
+    cachedNode.data.keepAlive = true
+
+    instance = new Vue({
+      router,
+      store,
+      render: () => cachedNode
+    })
+
+    // 缓存最初的Vue实例
+    instance.cachedInstance = cachedInstance
+
+    router.onReady(() => {
+      const { path } = router.currentRoute
+      const { path: oldPath } = cachedInstance.$router.currentRoute
+      // 当前路由和上一次卸载时不一致，则切换至新路由
+      if (path !== oldPath) {
+        cachedInstance.$router.push(path)
+      }
+    })
+    instance.$mount('#app')
+  } else {
+    // 正常实例化
+    instance = new Vue({
+      router,
+      store,
+      render: h => h(App)
+    }).$mount(container ? container.querySelector('#app') : '#app')
+  }
 }
 
 if (!window.__POWERED_BY_QIANKUN__) {
@@ -97,8 +130,14 @@ export async function mount(props) {
 }
 
 export async function unmount() {
+  const cachedInstance = instance.cachedInstance || instance
+  window.__CACHE_INSTANCE_BY_QIAN_KUN_FOR_VUE__ = cachedInstance
+  const cacahedNode = cachedInstance._vnode
+  // 让keep-alive可用
+  cacahedNode.data.keepAlive = true
+  // 卸载当前实例，缓存的实例由于keep-alive生效，将不会真正被销毁，从而触发activated与deactivated
   instance.$destroy()
-  instance.$el.innerHTML = ''
-  instance = null
   router = null
+  // instance.$el.innerHTML = ''
+  // instance = null
 }
