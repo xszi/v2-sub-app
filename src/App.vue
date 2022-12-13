@@ -40,7 +40,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-#app {
+#sub-app {
   padding: 0;
   margin: 0
 }

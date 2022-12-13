@@ -103,14 +103,14 @@ function render(props) {
         cachedInstance.$router.push(path)
       }
     })
-    instance.$mount('#app')
+    instance.$mount('#sub-app')
   } else {
     // 正常实例化
     instance = new Vue({
       router,
       store,
       render: h => h(App)
-    }).$mount(container ? container.querySelector('#app') : '#app')
+    }).$mount(container ? container.querySelector('#sub-app') : '#sub-app')
   }
 }
 
@@ -131,6 +131,7 @@ export async function mount(props) {
 
 export async function unmount() {
   const cachedInstance = instance.cachedInstance || instance
+  console.warn(cachedInstance, 666)
   window.__CACHE_INSTANCE_BY_QIAN_KUN_FOR_VUE__ = cachedInstance
   const cacahedNode = cachedInstance._vnode
   // 让keep-alive可用
