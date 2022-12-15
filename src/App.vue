@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="sub-app">
     <router-view v-if="isShow" />
   </div>
 </template>
