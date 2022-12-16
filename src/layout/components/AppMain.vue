@@ -1,7 +1,7 @@
 <template>
   <section class="micro-app-main">
     <transition name="fade-transform" mode="out-in">
-      <keep-alive :max="20" :include="cachedViews">
+      <keep-alive :max="20">
         <router-view :key="key" />
       </keep-alive>
     </transition>
@@ -16,7 +16,7 @@ export default {
       return this.$route.path
     },
     cachedViews() {
-      const fixedCachedViews = ['signInitiation']
+      const fixedCachedViews = ['CuteGirl, BlackHumor']
       return fixedCachedViews
     }
   }

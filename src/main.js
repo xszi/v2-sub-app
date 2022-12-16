@@ -112,8 +112,9 @@ export async function mount(props) {
 }
 
 export async function unmount() {
+  console.warn(111)
   instance.$destroy()
   instance.$el.innerHTML = ''
-  instance = null
+  // instance = null
   router = null
 }

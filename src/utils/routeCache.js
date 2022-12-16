@@ -15,6 +15,7 @@ function addVisitedView(view) {
     params: view.params,
     fullPath: view.fullPath,
     meta: {
+      mode: 'history',
       childApp: 'v2-sub-app',
       noCache: view.meta.noCache,
       title: view.meta.title
